@@ -1,0 +1,54 @@
+.message-input-container {
+    margin-top: auto;
+    background: white;
+    border-radius: 15px;
+    padding: 1rem;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.attachment-btn {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    color: #6b7280;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.attachment-btn:hover {
+    color: #3b82f6;
+}
+
+.message-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 1.5rem;
+    padding: 0.5rem;
+    background: transparent;
+}
+
+.message-input::placeholder {
+    color: #9ca3af;
+}
+
+.send-btn {
+    background: #3b82f6;
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.send-btn:hover {
+    background: #2563eb;
+}

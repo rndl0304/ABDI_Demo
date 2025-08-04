@@ -1,0 +1,5 @@
+.header-divider {
+height: 3px;
+background: linear-gradient(90deg, #ef4444, #22c55e, #eab308);
+margin-top: 1rem;
+}

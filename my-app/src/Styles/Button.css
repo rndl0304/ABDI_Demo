@@ -1,0 +1,14 @@
+.agro-bot-btn {
+    background: #3b82f6;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.agro-bot-btn:hover {
+    background: #2563eb;
+}

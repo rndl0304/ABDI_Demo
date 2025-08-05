@@ -39,12 +39,51 @@ const Chat: React.FC = () => {
     };
   }, []);
 
-  const handleSend = () => {
+  const SendDataWithSocket = () =>
+  {
+    socket.emit('message', input);
+  }
+
+  const SendDataWithHTTP = async () =>
+  {
+    const data = {
+        token: '12345',
+        message: input,
+      };
+
+          try {
+      const res = await fetch('http://10.89.10.6:5678/webhook-test/61c8a054-c2c5-4d70-b4bc-6b7aab38ec9b', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await res.json();
+
+      //setMessages(prev => [...prev, { sender: 'bot', content: msg }]);
+
+    } catch (err) {
+      console.error('Error:', err);
+    }
+
+
+  }
+
+
+  const handleSend = async () => {
     if (!input.trim()) return;
     initialComponentsVisible = false;
-    const newMessage: Message = { sender: 'user', content: input };
+    
+    SendDataWithSocket();
+    
+  
+    const newMessage: Message = { sender: 'user', content: input }; 
     setMessages(prev => [...prev, newMessage]);
-    socket.emit('message', input);
+
+    //await SendDataWithHTTP();
+
     setInput('');
   };
 

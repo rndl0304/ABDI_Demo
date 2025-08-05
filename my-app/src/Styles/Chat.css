@@ -21,9 +21,10 @@
 .chatbot-screen {
     height: 800px; /* Set a fixed height */
     max-height: 800px;
-    overflow-y: auto; /* Enable vertical scrolling when needed */
+    overflow-y: scroll; /* Enable vertical scrolling when needed */
     border: 0px solid #ccc; /* Optional: for better visibility */
 }
+
 .chatbot-container {
     background: #f8f9fa;
     border-radius: 20px;

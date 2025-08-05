@@ -1,6 +1,6 @@
 import '../Styles/Chat.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
 import Card from './Card'
 import '../Styles/Card.css';
@@ -19,12 +19,19 @@ const socket: Socket = io('http://localhost:4000'); // Change to your backend UR
 var initialComponentsVisible = true;
 
 const Chat: React.FC = () => {
+
+  const bottomRef = useRef<HTMLDivElement | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
 
   useEffect(() => {
     socket.on('botMessage', (msg: string) => {
       setMessages(prev => [...prev, { sender: 'bot', content: msg }]);
+      console.log('bottomRef.current:', bottomRef.current);
+      const timeout = setTimeout(() => {
+        bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+        }, 80); // Wait for next tick
+        return () => clearTimeout(timeout);
     });
 
     return () => {
@@ -148,6 +155,8 @@ const Chat: React.FC = () => {
                     <div className="message-content">{msg.content}</div>
                 </div>
             ))}
+          {/* Scroll anchor */}
+          <div ref={bottomRef}></div>
         </div>
 
         <div className="message-input-container">

@@ -51,8 +51,8 @@ const Chat: React.FC = () => {
         message: input,
       };
 
-          try {
-      const res = await fetch('http://10.89.10.6:5678/webhook-test/61c8a054-c2c5-4d70-b4bc-6b7aab38ec9b', {
+      try {
+      const res = await fetch('http://10.89.10.6:5678/webhook/61c8a054-c2c5-4d70-b4bc-6b7aab38ec9b', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -61,8 +61,14 @@ const Chat: React.FC = () => {
       });
 
       const result = await res.json();
+      console.log('Response:', result.output);
 
-      //setMessages(prev => [...prev, { sender: 'bot', content: msg }]);
+      setMessages(prev => [...prev, { sender: 'bot', content: result.output }]);
+
+      console.log('bottomRef.current:', bottomRef.current);
+      const timeout = setTimeout(() => {
+      bottomRef.current?.scrollIntoView({ behavior: 'smooth' });}, 80); // Wait for next tick
+      return () => clearTimeout(timeout);
 
     } catch (err) {
       console.error('Error:', err);
@@ -76,15 +82,17 @@ const Chat: React.FC = () => {
     if (!input.trim()) return;
     initialComponentsVisible = false;
     
-    SendDataWithSocket();
+    //SendDataWithSocket();
     
   
     const newMessage: Message = { sender: 'user', content: input }; 
     setMessages(prev => [...prev, newMessage]);
-
-    //await SendDataWithHTTP();
-
+    
     setInput('');
+
+    await SendDataWithHTTP();
+
+    
   };
 
   const handleSetBusiness = () =>

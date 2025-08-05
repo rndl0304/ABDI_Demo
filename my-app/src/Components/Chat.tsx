@@ -8,6 +8,7 @@ import Icon from './Icon'
 import Welcome from './Welcome'
 import '../Styles/Input.css';
 import '../Styles/Message.css';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 interface Message {
   sender: 'bot' | 'user';
@@ -23,9 +24,11 @@ const Chat: React.FC = () => {
   const bottomRef = useRef<HTMLDivElement | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     socket.on('botMessage', (msg: string) => {
+      setIsLoading(false);
       setMessages(prev => [...prev, { sender: 'bot', content: msg }]);
       console.log('bottomRef.current:', bottomRef.current);
       const timeout = setTimeout(() => {
@@ -41,11 +44,14 @@ const Chat: React.FC = () => {
 
   const SendDataWithSocket = () =>
   {
+    setIsLoading(true);
     socket.emit('message', input);
   }
 
   const SendDataWithHTTP = async () =>
   {
+    setIsLoading(true);
+
     const data = {
         token: '12345',
         message: input,
@@ -73,6 +79,10 @@ const Chat: React.FC = () => {
     } catch (err) {
       console.error('Error:', err);
     }
+    finally
+    {
+      setIsLoading(false);
+    }
 
 
   }
@@ -82,7 +92,7 @@ const Chat: React.FC = () => {
     if (!input.trim()) return;
     initialComponentsVisible = false;
     
-    //SendDataWithSocket();
+   
     
   
     const newMessage: Message = { sender: 'user', content: input }; 
@@ -90,7 +100,9 @@ const Chat: React.FC = () => {
     
     setInput('');
 
-    await SendDataWithHTTP();
+    
+    SendDataWithSocket();
+    //await SendDataWithHTTP();
 
     
   };
@@ -131,6 +143,14 @@ const Chat: React.FC = () => {
     setInput('Olá, AgroBot, tudo bem? Por gentileza, com base nas informações que você possui, me forneça um resumo de uma página sobre o turismo ligado ao Agronegócio no Nordeste, comparando também com o turismo geral no Brasil.');
   }
 
+  function formatPlainText(input: string): string {
+  return input
+    // Remove ** but preserve text inside
+    .replace(/\*\*(.*?)\*\*/g, '$1')
+    // Add line break before lines starting with '- '
+    .replace(/-/g, '\n-')
+    .replace(/\[Link\]/g, '');
+}
 
   return (
     <div className="chatbot-container">
@@ -199,11 +219,18 @@ const Chat: React.FC = () => {
                     className={`message-bubble ${msg.sender === 'user' ? 'user' : 'bot'}`}
                 >
                     {msg.sender === 'bot' && <div className="bot-icon"><i className="fas fa-leaf chatbot-icon"></i></div>}
-                    <div className="message-content">{msg.content}</div>
+                    <pre className="message-content" style={{ whiteSpace: 'pre-wrap', fontFamily: 'inherit' }}>
+                      {formatPlainText(msg.content)}
+                    </pre>
                 </div>
             ))}
           {/* Scroll anchor */}
           <div ref={bottomRef}></div>
+
+          {isLoading && <div>
+                        <ClipLoader color="#36d7b7"/>
+                        <p>Loading...</p>
+                        </div>}
         </div>
 
         <div className="message-input-container">

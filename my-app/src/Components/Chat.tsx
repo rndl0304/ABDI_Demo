@@ -14,7 +14,7 @@ interface Message {
   content: string;
 }
 
-const socket: Socket = io('http://localhost:5000'); // Change to your backend URL
+const socket: Socket = io('http://localhost:4000'); // Change to your backend URL
 
 var initialComponentsVisible = true;
 
@@ -138,7 +138,7 @@ const Chat: React.FC = () => {
             }
         </div>
         
-        <div>
+        <div className='chatbot-screen'>
             {messages.map((msg, idx) => (
                 <div
                     key={idx}

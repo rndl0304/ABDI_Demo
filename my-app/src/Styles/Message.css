@@ -2,11 +2,12 @@
 .message-bubble {
   display: flex;
   margin-bottom: 10px;
-  max-width: 100%;
+  margin-left: 200px;
 }
 
 .message-bubble.bot {
   align-self: flex-start;
+  margin-left: 0px
 }
 
 .message-bubble.user {
@@ -25,7 +26,7 @@
   padding: 10px 15px;
   border-radius: 20px;
   color: #333;
-  font-size: 1.8rem;
+  font-size: 1.4rem;
 }
 
 .message-bubble.user .message-content {

@@ -139,6 +139,7 @@ const Chat: React.FC = () => {
   const onClose = () => {
     initialComponentsVisible = true;
     SetNewToken(getRandomInt(1, 10000).toString());
+    setIsLoading(false);
     setMessages(prev => []);
   }
 
@@ -184,7 +185,12 @@ const Chat: React.FC = () => {
   return (
     <div className="chatbot-container">
 
-      <div className="chatbot-header">
+      <div className="chatbot-header"
+        style={{
+          gap: "84%"
+        }}
+      >
+        <Icon />
         <div>
           {
             !initialComponentsVisible ?
@@ -200,15 +206,13 @@ const Chat: React.FC = () => {
                 cursor: 'pointer',
                 position: 'inherit',
                 top: '10px',
-                right: '10px',
+                right: '10px'
               }} onClick={onClose}>Voltar</button>
               :
               <></>
 
           }
         </div>
-        <i className="fas fa-leaf chatbot-icon"></i>
-        <span>AgroBOT</span>
       </div>
 
 

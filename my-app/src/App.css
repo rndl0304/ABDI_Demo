@@ -123,16 +123,10 @@ body {
     padding: 1rem 1.5rem;
     border-radius: 15px 15px 0 0;
     display: flex;
-    align-items: center;
-    gap: 0.5rem;
+    flex-direction:row; /* or row */
     margin: -2rem -2rem 2rem -2rem;
 }
 
-.new-header {
-    background: #3b82f6;
-    padding: 0.3rem 1.3rem;
-    margin: -2rem -2rem 2rem -2rem;
-}
 
 .chatbot-icon {
     font-size: 1.5rem;

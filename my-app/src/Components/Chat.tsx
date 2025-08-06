@@ -50,7 +50,7 @@ const Chat: React.FC = () => {
 
   const SendDataWithHTTP = async () => {
     setIsLoading(true);
-    
+
     const data = {
       token: Token,
       message: input,
@@ -92,6 +92,10 @@ const Chat: React.FC = () => {
     const newMessage: Message = { sender: 'user', content: input };
     setMessages(prev => [...prev, newMessage]);
 
+    console.log('bottomRef.current:', bottomRef.current);
+    const timeout = setTimeout(() => {
+      bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, 80); // Wait for next tick
     setInput('');
 
     //SendDataWithSocket();
@@ -134,7 +138,7 @@ const Chat: React.FC = () => {
 
   const onClose = () => {
     initialComponentsVisible = true;
-    SetNewToken(getRandomInt(1, 10000).toString()); 
+    SetNewToken(getRandomInt(1, 10000).toString());
     setMessages(prev => []);
   }
 

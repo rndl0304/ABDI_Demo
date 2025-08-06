@@ -25,6 +25,10 @@ const Chat: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const data = {
+    token: '12345',
+    message: input,
+  };
 
   useEffect(() => {
     socket.on('botMessage', (msg: string) => {
@@ -50,13 +54,8 @@ const Chat: React.FC = () => {
   const SendDataWithHTTP = async () => {
     setIsLoading(true);
 
-    const data = {
-      token: '12345',
-      message: input,
-    };
-
     try {
-      const res = await fetch('http://10.89.10.6:5678/webhook/61c8a054-c2c5-4d70-b4bc-6b7aab38ec9b', {
+      const res = await fetch('http://10.193.62.6:5678/webhook/61c8a054-c2c5-4d70-b4bc-6b7aab38ec9b', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -93,8 +92,8 @@ const Chat: React.FC = () => {
 
     setInput('');
 
-    SendDataWithSocket();
-    //await SendDataWithHTTP();
+    //SendDataWithSocket();
+    await SendDataWithHTTP();
   };
 
   const handleSetBusiness = () => {
@@ -127,8 +126,14 @@ const Chat: React.FC = () => {
     setInput('Olá, AgroBot, tudo bem? Por gentileza, com base nas informações que você possui, me forneça um resumo de uma página sobre o turismo ligado ao Agronegócio no Nordeste, comparando também com o turismo geral no Brasil.');
   }
 
+  function getRandomInt(min: number, max: number): number {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
   const onClose = () => {
     initialComponentsVisible = true;
+    const randomNumber = getRandomInt(1, 10000);
+    data.token = randomNumber.toString();
     setMessages(prev => []);
   }
 
@@ -158,7 +163,7 @@ const Chat: React.FC = () => {
   }
 
   function formatNumberedList(text: string): string {
-    return text.replace(/(?<!\d)\b(\d{1,2})\.(?=\s*[A-Za-z])/g, '\n\n$1.');
+    return text.replace(/(?<![\d,])\s?(\d{1,2})\.(?=\s*[A-Za-z])/g, '\n\n$1.');
   }
 
   function formatPlainText(input: string): string {
@@ -174,10 +179,10 @@ const Chat: React.FC = () => {
   return (
     <div className="chatbot-container">
 
-        <div className="chatbot-header">
-                <div>
-        {
-          !initialComponentsVisible ?
+      <div className="chatbot-header">
+        <div>
+          {
+            !initialComponentsVisible ?
               <button style={{
                 background: '#1e3a8a',
                 border: 'none',
@@ -192,14 +197,14 @@ const Chat: React.FC = () => {
                 top: '10px',
                 right: '10px',
               }} onClick={onClose}>Voltar</button>
-            :
-            <></>
-            
-        }
+              :
+              <></>
+
+          }
         </div>
-          <i className="fas fa-leaf chatbot-icon"></i>
-          <span>AgroBOT</span>
-        </div>
+        <i className="fas fa-leaf chatbot-icon"></i>
+        <span>AgroBOT</span>
+      </div>
 
 
       <div>
@@ -259,8 +264,10 @@ const Chat: React.FC = () => {
         }
       </div>
 
+
       <div className='chatbot-screen'>
-        {messages.map((msg, idx) => (
+
+        {!initialComponentsVisible ? messages.map((msg, idx) => (
           <div
             key={idx}
             className={`message-bubble ${msg.sender === 'user' ? 'user' : 'bot'}`}
@@ -270,14 +277,15 @@ const Chat: React.FC = () => {
               {formatPlainText(msg.content)}
             </pre>
           </div>
-        ))}
-        {/* Scroll anchor */}
+        )) : <></>}
+
         <div ref={bottomRef}></div>
 
         {isLoading && <div>
           <ClipLoader color="#36d7b7" />
           <p>Loading...</p>
         </div>}
+
       </div>
 
       <div className="message-input-container">

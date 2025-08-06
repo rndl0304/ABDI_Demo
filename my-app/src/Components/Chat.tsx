@@ -26,7 +26,7 @@ const Chat: React.FC = () => {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const data = {
-    token: '12345',
+    token: getRandomInt(1, 10000).toString(),
     message: input,
   };
 

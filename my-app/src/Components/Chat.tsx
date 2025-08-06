@@ -173,28 +173,33 @@ const Chat: React.FC = () => {
 
   return (
     <div className="chatbot-container">
-      <Icon />
-      <div>
+
+        <div className="chatbot-header">
+                <div>
         {
           !initialComponentsVisible ?
-            <button style={{
-              background: '#1e3a8a',
-              border: 'none',
-              borderRadius : 30,
-              fontSize: 25,
-              width : 200,
-              height : 50,
-              marginBottom: 10,
-              marginLeft : 430,
-              color: 'white',
-              cursor: 'pointer',
-              position: 'inherit',
-              top: '10px',
-              right: '10px',
-            }} onClick={onClose}>Nova Conversa</button> :
+              <button style={{
+                background: '#1e3a8a',
+                border: 'none',
+                borderRadius: 30,
+                fontSize: 16,
+                width: 75,
+                height: 25,
+                marginBottom: 0,
+                color: 'white',
+                cursor: 'pointer',
+                position: 'inherit',
+                top: '10px',
+                right: '10px',
+              }} onClick={onClose}>Voltar</button>
+            :
             <></>
+            
         }
-      </div>
+        </div>
+          <i className="fas fa-leaf chatbot-icon"></i>
+          <span>AgroBOT</span>
+        </div>
 
 
       <div>

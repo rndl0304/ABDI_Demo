@@ -104,32 +104,32 @@ const Chat: React.FC = () => {
 
   const handleSetBusiness = () => {
     setInput('');
-    setInput('Olá, AgroBot, tudo bem? Por gentileza, com base nas informações que você possui, me forneça um resumo de uma página sobre os negócios do Agronegócio no Nordeste.');
+    setInput('Quantas fazendas de Pernambuco têm tratores em seus maquinários?');
   }
 
   const handleSetKnowledge = () => {
     setInput('');
-    setInput('Olá, AgroBot, tudo bem? Por gentileza, com base nas informações que você possui, me forneça um resumo de uma página sobre quais são as Universidades e Institutos de Pesquisa do Agronegócio no Nordeste.');
+    setInput('Quantos institutos de pesquisas voltados ao agro existem no Ceará?');
   }
 
   const handleSetGovernment = () => {
     setInput('');
-    setInput('Olá, AgroBot, tudo bem? Por gentileza, com base nas informações que você possui, me forneça um resumo de uma página sobre quais são as Entidades Governamentais ligadas ao Agronegócio no Nordeste.');
+    setInput('Que instituições podem fomentar as minhas iniciativas agrícolas em Sergipe?');
   }
 
   const handleSetCulture = () => {
     setInput('');
-    setInput('Olá, AgroBot, tudo bem? Por gentileza, com base nas informações que você possui, me forneça um resumo de uma página sobre quais são os eventos do Agronegócio no Nordeste.');
+    setInput('Quais as feiras voltadas para o agronegócio acontecem em dezembro?');
   }
 
   const handleSetEconomy = () => {
     setInput('');
-    setInput('Olá, AgroBot, tudo bem? Por gentileza, com base nas informações que você possui, me forneça um resumo de uma página sobre a economia do Agronegócio no Nordeste, comparando também com a economia do Brasil.');
+    setInput('Qual o maior produtor de tambaqui no nordeste?');
   }
 
   const handleSetTourism = () => {
     setInput('');
-    setInput('Olá, AgroBot, tudo bem? Por gentileza, com base nas informações que você possui, me forneça um resumo de uma página sobre o turismo ligado ao Agronegócio no Nordeste, comparando também com o turismo geral no Brasil.');
+    setInput(' Na Paraíba, qual parque tecnológico posso conhecer?');
   }
 
   function getRandomInt(min: number, max: number): number {

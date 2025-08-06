@@ -25,10 +25,7 @@ const Chat: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const data = {
-    token: getRandomInt(1, 10000).toString(),
-    message: input,
-  };
+  const [Token, SetNewToken] = useState(getRandomInt(1, 10000).toString());
 
   useEffect(() => {
     socket.on('botMessage', (msg: string) => {
@@ -53,6 +50,11 @@ const Chat: React.FC = () => {
 
   const SendDataWithHTTP = async () => {
     setIsLoading(true);
+    
+    const data = {
+      token: Token,
+      message: input,
+    };
 
     try {
       const res = await fetch('http://10.193.62.6:5678/webhook/61c8a054-c2c5-4d70-b4bc-6b7aab38ec9b', {
@@ -132,8 +134,7 @@ const Chat: React.FC = () => {
 
   const onClose = () => {
     initialComponentsVisible = true;
-    const randomNumber = getRandomInt(1, 10000);
-    data.token = randomNumber.toString();
+    SetNewToken(getRandomInt(1, 10000).toString()); 
     setMessages(prev => []);
   }
 
@@ -173,7 +174,7 @@ const Chat: React.FC = () => {
       // Add line break before lines starting with '- '
       .replace(/\[Link\]/g, '');
 
-    return formatNumberedList(replaceHyphensExceptInLinks(result));
+    return formatNumberedList(result);
   }
 
   return (

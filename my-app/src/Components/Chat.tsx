@@ -33,8 +33,8 @@ const Chat: React.FC = () => {
       console.log('bottomRef.current:', bottomRef.current);
       const timeout = setTimeout(() => {
         bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-        }, 80); // Wait for next tick
-        return () => clearTimeout(timeout);
+      }, 80); // Wait for next tick
+      return () => clearTimeout(timeout);
     });
 
     return () => {
@@ -42,22 +42,20 @@ const Chat: React.FC = () => {
     };
   }, []);
 
-  const SendDataWithSocket = () =>
-  {
+  const SendDataWithSocket = () => {
     setIsLoading(true);
     socket.emit('message', input);
   }
 
-  const SendDataWithHTTP = async () =>
-  {
+  const SendDataWithHTTP = async () => {
     setIsLoading(true);
 
     const data = {
-        token: '12345',
-        message: input,
-      };
+      token: '12345',
+      message: input,
+    };
 
-      try {
+    try {
       const res = await fetch('http://10.89.10.6:5678/webhook/61c8a054-c2c5-4d70-b4bc-6b7aab38ec9b', {
         method: 'POST',
         headers: {
@@ -73,74 +71,65 @@ const Chat: React.FC = () => {
 
       console.log('bottomRef.current:', bottomRef.current);
       const timeout = setTimeout(() => {
-      bottomRef.current?.scrollIntoView({ behavior: 'smooth' });}, 80); // Wait for next tick
+        bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+      }, 80); // Wait for next tick
       return () => clearTimeout(timeout);
 
     } catch (err) {
       console.error('Error:', err);
     }
-    finally
-    {
+    finally {
       setIsLoading(false);
     }
-
-
   }
 
 
   const handleSend = async () => {
     if (!input.trim()) return;
     initialComponentsVisible = false;
-    
-   
-    
-  
-    const newMessage: Message = { sender: 'user', content: input }; 
+
+    const newMessage: Message = { sender: 'user', content: input };
     setMessages(prev => [...prev, newMessage]);
-    
+
     setInput('');
 
-    
     SendDataWithSocket();
     //await SendDataWithHTTP();
-
-    
   };
 
-  const handleSetBusiness = () =>
-  {
+  const handleSetBusiness = () => {
     setInput('');
     setInput('Olá, AgroBot, tudo bem? Por gentileza, com base nas informações que você possui, me forneça um resumo de uma página sobre os negócios do Agronegócio no Nordeste.');
   }
 
-  const handleSetKnowledge = () =>
-  {
+  const handleSetKnowledge = () => {
     setInput('');
     setInput('Olá, AgroBot, tudo bem? Por gentileza, com base nas informações que você possui, me forneça um resumo de uma página sobre quais são as Universidades e Institutos de Pesquisa do Agronegócio no Nordeste.');
   }
 
-  const handleSetGovernment = () =>
-  {
+  const handleSetGovernment = () => {
     setInput('');
     setInput('Olá, AgroBot, tudo bem? Por gentileza, com base nas informações que você possui, me forneça um resumo de uma página sobre quais são as Entidades Governamentais ligadas ao Agronegócio no Nordeste.');
   }
 
-  const handleSetCulture = () =>
-  {
+  const handleSetCulture = () => {
     setInput('');
     setInput('Olá, AgroBot, tudo bem? Por gentileza, com base nas informações que você possui, me forneça um resumo de uma página sobre quais são os eventos do Agronegócio no Nordeste.');
   }
 
-  const handleSetEconomy = () =>
-  {
+  const handleSetEconomy = () => {
     setInput('');
     setInput('Olá, AgroBot, tudo bem? Por gentileza, com base nas informações que você possui, me forneça um resumo de uma página sobre a economia do Agronegócio no Nordeste, comparando também com a economia do Brasil.');
   }
 
-    const handleSetTourism = () =>
-  {
+  const handleSetTourism = () => {
     setInput('');
     setInput('Olá, AgroBot, tudo bem? Por gentileza, com base nas informações que você possui, me forneça um resumo de uma página sobre o turismo ligado ao Agronegócio no Nordeste, comparando também com o turismo geral no Brasil.');
+  }
+
+  const onClose = () => {
+    initialComponentsVisible = true;
+    setMessages(prev => []);
   }
 
   function replaceHyphensExceptInLinks(text: string): string {
@@ -152,9 +141,9 @@ const Chat: React.FC = () => {
     const placeholder = (i: number) => `__LINK_PLACEHOLDER_${i}__`;
 
     const textWithPlaceholders = text.replace(linkRegex, (match) => {
-        const index = links.length;
-        links.push(match);
-        return placeholder(index);
+      const index = links.length;
+      links.push(match);
+      return placeholder(index);
     });
 
     // Replace hyphens outside of links
@@ -162,116 +151,139 @@ const Chat: React.FC = () => {
 
     // Restore the links from placeholders
     const restored = links.reduce((acc, link, i) => {
-        return acc.replace(placeholder(i), link);
+      return acc.replace(placeholder(i), link);
     }, replaced);
 
     return restored;
-}
+  }
 
-function formatNumberedList(text: string): string {
+  function formatNumberedList(text: string): string {
     return text.replace(/(?<!\d)\b(\d{1,2})\.(?=\s*[A-Za-z])/g, '\n\n$1.');
-}
+  }
 
   function formatPlainText(input: string): string {
-  var result = input
-    // Remove ** but preserve text inside
-    .replace(/\*\*(.*?)\*\*/g, '$1')
-    // Add line break before lines starting with '- '
-    .replace(/\[Link\]/g, '');
+    var result = input
+      // Remove ** but preserve text inside
+      .replace(/\*\*(.*?)\*\*/g, '$1')
+      // Add line break before lines starting with '- '
+      .replace(/\[Link\]/g, '');
 
     return formatNumberedList(replaceHyphensExceptInLinks(result));
-}
+  }
 
   return (
     <div className="chatbot-container">
-        <Icon/>
-        <div>
-            {
-                initialComponentsVisible ?
-                <>  <Welcome />
-                    <div className="topics-grid">
-                        <button className="topic-card"  onClick={handleSetBusiness}>
-                            <div className="topic-icon business-icon">
-                                <i className="fas fa-dollar-sign"></i>
-                            </div>
-                            <h3 className="topic-title">Negócios</h3>
-                            <p className="topic-description">Agtechs, Cooperativas, Maquinário, Apoio técnico, Conectividade, Rebanhos...</p>
-                        </button>
-                        <button className="topic-card" onClick={handleSetKnowledge}>
-                            <div className="topic-icon knowledge-icon">
-                                <i className="fas fa-book-open"></i>
-                            </div>
-                            <h3 className="topic-title">Conhecimento</h3>
-                            <p className="topic-description">Universidades, Institutos de pesquisa...</p>
-                        </button>
+      <Icon />
+      <div>
+        {
+          !initialComponentsVisible ?
+            <button style={{
+              background: '#1e3a8a',
+              border: 'none',
+              borderRadius : 30,
+              fontSize: 25,
+              width : 200,
+              height : 50,
+              marginBottom: 10,
+              marginLeft : 430,
+              color: 'white',
+              cursor: 'pointer',
+              position: 'inherit',
+              top: '10px',
+              right: '10px',
+            }} onClick={onClose}>Nova Conversa</button> :
+            <></>
+        }
+      </div>
 
-                        <button className="topic-card" onClick={handleSetGovernment}>
-                            <div className="topic-icon government-icon">
-                                <i className="fas fa-globe-americas"></i>
-                            </div>
-                            <h3 className="topic-title">Governo</h3>
-                            <p className="topic-description">Políticas públicas, Ministérios, Incentivos...</p>
-                        </button>
 
-                        <button className="topic-card" onClick={handleSetCulture}>
-                            <div className="topic-icon culture-icon">
-                                <i className="fas fa-users"></i>
-                            </div>
-                            <h3 className="topic-title">Cultura</h3>
-                            <p className="topic-description">Tradições, Eventos culturais, Patrimônio rural...</p>
-                        </button>
+      <div>
+        {
+          initialComponentsVisible ?
+            <>  <Welcome />
+              <div className="topics-grid">
+                <button className="topic-card" onClick={handleSetBusiness}>
+                  <div className="topic-icon business-icon">
+                    <i className="fas fa-dollar-sign"></i>
+                  </div>
+                  <h3 className="topic-title">Negócios</h3>
+                  <p className="topic-description">Agtechs, Cooperativas, Maquinário, Apoio técnico, Conectividade, Rebanhos...</p>
+                </button>
+                <button className="topic-card" onClick={handleSetKnowledge}>
+                  <div className="topic-icon knowledge-icon">
+                    <i className="fas fa-book-open"></i>
+                  </div>
+                  <h3 className="topic-title">Conhecimento</h3>
+                  <p className="topic-description">Universidades, Institutos de pesquisa...</p>
+                </button>
 
-                        <button className="topic-card" onClick={handleSetEconomy}>
-                            <div className="topic-icon economy-icon">
-                                <i className="fas fa-chart-line"></i>
-                            </div>
-                            <h3 className="topic-title">Economia</h3>
-                            <p className="topic-description">Indicadores econômicos, Mercado agrícola, Investimentos...</p>
-                        </button>
+                <button className="topic-card" onClick={handleSetGovernment}>
+                  <div className="topic-icon government-icon">
+                    <i className="fas fa-globe-americas"></i>
+                  </div>
+                  <h3 className="topic-title">Governo</h3>
+                  <p className="topic-description">Políticas públicas, Ministérios, Incentivos...</p>
+                </button>
 
-                        <button className="topic-card" onClick={handleSetTourism}>
-                            <div className="topic-icon tourism-icon">
-                                <i className="fas fa-suitcase"></i>
-                            </div>
-                            <h3 className="topic-title">Turismo</h3>
-                            <p className="topic-description">Turismo rural, Roteiros, Experiências no campo...</p>
-                        </button>
-                    </div>
-                </> :
-                <></>
-            }
-        </div>
-        
-        <div className='chatbot-screen'>
-            {messages.map((msg, idx) => (
-                <div
-                    key={idx}
-                    className={`message-bubble ${msg.sender === 'user' ? 'user' : 'bot'}`}
-                >
-                    {msg.sender === 'bot' && <div className="bot-icon"><i className="fas fa-leaf chatbot-icon"></i></div>}
-                    <pre className="message-content" style={{ whiteSpace: 'pre-wrap', fontFamily: 'inherit' }}>
-                      {formatPlainText(msg.content)}
-                    </pre>
-                </div>
-            ))}
-          {/* Scroll anchor */}
-          <div ref={bottomRef}></div>
+                <button className="topic-card" onClick={handleSetCulture}>
+                  <div className="topic-icon culture-icon">
+                    <i className="fas fa-users"></i>
+                  </div>
+                  <h3 className="topic-title">Cultura</h3>
+                  <p className="topic-description">Tradições, Eventos culturais, Patrimônio rural...</p>
+                </button>
 
-          {isLoading && <div>
-                        <ClipLoader color="#36d7b7"/>
-                        <p>Loading...</p>
-                        </div>}
-        </div>
+                <button className="topic-card" onClick={handleSetEconomy}>
+                  <div className="topic-icon economy-icon">
+                    <i className="fas fa-chart-line"></i>
+                  </div>
+                  <h3 className="topic-title">Economia</h3>
+                  <p className="topic-description">Indicadores econômicos, Mercado agrícola, Investimentos...</p>
+                </button>
 
-        <div className="message-input-container">
-            <input
-                className="message-input"
-                type="text"
-                placeholder="Digite sua mensagem..."
-                value={input}
-                onChange={e => setInput(e.target.value)}
-                onKeyDown={e => e.key === 'Enter' && handleSend()}
-            />
+                <button className="topic-card" onClick={handleSetTourism}>
+                  <div className="topic-icon tourism-icon">
+                    <i className="fas fa-suitcase"></i>
+                  </div>
+                  <h3 className="topic-title">Turismo</h3>
+                  <p className="topic-description">Turismo rural, Roteiros, Experiências no campo...</p>
+                </button>
+              </div>
+            </> :
+            <></>
+        }
+      </div>
+
+      <div className='chatbot-screen'>
+        {messages.map((msg, idx) => (
+          <div
+            key={idx}
+            className={`message-bubble ${msg.sender === 'user' ? 'user' : 'bot'}`}
+          >
+            {msg.sender === 'bot' && <div className="bot-icon"><i className="fas fa-leaf chatbot-icon"></i></div>}
+            <pre className="message-content" style={{ whiteSpace: 'pre-wrap', fontFamily: 'inherit' }}>
+              {formatPlainText(msg.content)}
+            </pre>
+          </div>
+        ))}
+        {/* Scroll anchor */}
+        <div ref={bottomRef}></div>
+
+        {isLoading && <div>
+          <ClipLoader color="#36d7b7" />
+          <p>Loading...</p>
+        </div>}
+      </div>
+
+      <div className="message-input-container">
+        <input
+          className="message-input"
+          type="text"
+          placeholder="Digite sua mensagem..."
+          value={input}
+          onChange={e => setInput(e.target.value)}
+          onKeyDown={e => e.key === 'Enter' && handleSend()}
+        />
         <button className="send-btn" onClick={handleSend}>➤</button>
       </div>
     </div>

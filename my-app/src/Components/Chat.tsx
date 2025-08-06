@@ -143,13 +143,43 @@ const Chat: React.FC = () => {
     setInput('Olá, AgroBot, tudo bem? Por gentileza, com base nas informações que você possui, me forneça um resumo de uma página sobre o turismo ligado ao Agronegócio no Nordeste, comparando também com o turismo geral no Brasil.');
   }
 
+  function replaceHyphensExceptInLinks(text: string): string {
+    // Match Markdown links [text](url) and plain URLs
+    const linkRegex = /\[.*?\]\(.*?\)|https?:\/\/[^\s)]+/g;
+
+    // Store the links and replace them with placeholders
+    const links: string[] = [];
+    const placeholder = (i: number) => `__LINK_PLACEHOLDER_${i}__`;
+
+    const textWithPlaceholders = text.replace(linkRegex, (match) => {
+        const index = links.length;
+        links.push(match);
+        return placeholder(index);
+    });
+
+    // Replace hyphens outside of links
+    const replaced = textWithPlaceholders.replace(/-/g, '\n');
+
+    // Restore the links from placeholders
+    const restored = links.reduce((acc, link, i) => {
+        return acc.replace(placeholder(i), link);
+    }, replaced);
+
+    return restored;
+}
+
+function formatNumberedList(text: string): string {
+    return text.replace(/(?<!\d)\b(\d{1,2})\.(?=\s*[A-Za-z])/g, '\n\n$1.');
+}
+
   function formatPlainText(input: string): string {
-  return input
+  var result = input
     // Remove ** but preserve text inside
     .replace(/\*\*(.*?)\*\*/g, '$1')
     // Add line break before lines starting with '- '
-    .replace(/-/g, '\n-')
     .replace(/\[Link\]/g, '');
+
+    return formatNumberedList(replaceHyphensExceptInLinks(result));
 }
 
   return (
